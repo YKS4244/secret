@@ -113,7 +113,7 @@
 </head>
 <body>
   <div class="container" id="main">
-    <h1>Will you be my Valentine pretty please ? ❤️</h1>
+    <h1>Will you be my Valentine? ❤️</h1>
     <div class="buttons">
       <button id="yesBtn">Yes</button>
       <button id="noBtn">No</button>
@@ -122,7 +122,7 @@
 
   <div class="heart-screen" id="heartScreen">
     <div class="heart"></div>
-    <div class="yes-text">SHE SAID YES HHDDQSIDHYSQ !! 💖</div>
+    <div class="yes-text">SHE SAID YES !! 💖</div>
   </div>
 
   <script>
@@ -132,15 +132,17 @@
     const main = document.getElementById('main');
 
     function moveNoButton() {
-      const padding = 20;
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
+      const container = document.querySelector('.buttons');
+      const padding = 10;
 
-      const maxX = window.innerWidth - btnWidth - padding;
-      const maxY = window.innerHeight - btnHeight - padding;
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const maxX = containerRect.width - btnRect.width - padding;
+      const maxY = containerRect.height - btnRect.height - padding;
+
+      const x = Math.random() * Math.max(0, maxX);
+      const y = Math.random() * Math.max(0, maxY);
 
       noBtn.style.left = x + 'px';
       noBtn.style.top = y + 'px';
@@ -167,3 +169,4 @@
   </script>
 </body>
 </html>
+
