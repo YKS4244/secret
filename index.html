@@ -1,156 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>💘 For You</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine?</title>
   <style>
+    * { box-sizing: border-box; font-family: 'Arial', sans-serif; }
+
     body {
       margin: 0;
       height: 100vh;
-      background: pink;
       overflow: hidden;
-      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffdde1;
+      background-image:
+        radial-gradient(#ff4d88 12%, transparent 13%),
+        radial-gradient(#ff4d88 12%, transparent 13%);
+      background-size: 50px 50px;
+      background-position: 0 0, 25px 25px;
+    }
+
+    .container {
       text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px 60px;
+      border-radius: 25px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    h1 { color: #ff3366; margin-bottom: 30px; }
+
+    .buttons { position: relative; height: 140px; }
+
+    button {
+      padding: 15px 35px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    #yesBtn { background-color: #ff3366; color: white; }
+
+    #noBtn {
+      background-color: #cccccc;
+      color: #333;
+      position: absolute;
+      left: 120px;
+      top: 60px;
+    }
+
+    /* YES SCREEN */
+    .heart-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: #ff3366;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: pink;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh); opacity: 0; }
+      to { transform: translateY(-10vh); opacity: 1; }
     }
 
     .heart {
+      width: 200px;
+      height: 200px;
+      background: white;
+      position: relative;
+      transform: rotate(-45deg);
+      animation: pulse 1s infinite;
+      margin-bottom: 40px;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 200px;
+      height: 200px;
+      background: white;
+      border-radius: 50%;
       position: absolute;
-      color: red;
-      animation: float 6s linear infinite;
     }
 
-    @keyframes float {
-      0% { transform: translateY(100vh); opacity: 1; }
-      100% { transform: translateY(-10vh); opacity: 0; }
-    }
+    .heart::before { top: -100px; left: 0; }
+    .heart::after { left: 100px; top: 0; }
 
-    h1 {
-      margin-top: 150px;
-      font-size: 40px;
-      color: #b30059;
-      position: relative;
-      z-index: 2;
-    }
+    .yes-text { font-size: 36px; font-weight: bold; }
 
-    button {
-      font-size: 22px;
-      padding: 15px 30px;
-      margin: 20px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      position: relative;
-      z-index: 2;
+    @keyframes pulse {
+      0% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.15); }
+      100% { transform: rotate(-45deg) scale(1); }
     }
-
-    #yes { background-color: #ff4d88; color: white; }
-    #no { background-color: #ccc; }
   </style>
 </head>
 <body>
+  <div class="container" id="main">
+    <h1>Will you be my Valentine? ❤️</h1>
+    <div class="buttons">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
 
-<h1>💖 Will you be my Valentine? 💖</h1>
+  <div class="heart-screen" id="heartScreen">
+    <div class="heart"></div>
+    <div class="yes-text">SHE SAID YES !! 💖</div>
+  </div>
 
-<button id="yes">Yes 😍</button>
-<button id="no">No 🙄</button>
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const heartScreen = document.getElementById('heartScreen');
+    const main = document.getElementById('main');
 
-<script>
-  // Hearts background (normal)
-  let heartInterval = setInterval(createHeart, 300);
+    function moveNoButton() {
+      const padding = 20;
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
 
-  function createHeart(size = 1, x = null, y = null) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.fontSize = (Math.random() * 30 + 15) * size + "px";
-    heart.style.left = (x !== null ? x : Math.random() * window.innerWidth) + "px";
-    heart.style.top = (y !== null ? y : window.innerHeight + 20) + "px";
-    heart.style.position = "absolute";
+      const maxX = window.innerWidth - btnWidth - padding;
+      const maxY = window.innerHeight - btnHeight - padding;
 
-    heart.animate(
-      [
-        { transform: "translateY(0)", opacity: 1 },
-        { transform: "translateY(-600px)", opacity: 0 }
-      ],
-      { duration: 2000, easing: "ease-out" }
-    );
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
 
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 2000);
-  }
-
-  const yesBtn = document.getElementById("yes");
-
-  yesBtn.addEventListener("click", () => {
-    // Button pulse
-    yesBtn.animate(
-      [
-        { transform: "scale(1)" },
-        { transform: "scale(1.3)" },
-        { transform: "scale(1)" }
-      ],
-      { duration: 600 }
-    );
-
-    // Heart explosion from button
-    const rect = yesBtn.getBoundingClientRect();
-    for (let i = 0; i < 25; i++) {
-      setTimeout(() => {
-        createHeart(
-          1.8,
-          rect.left + rect.width / 2 + Math.random() * 100 - 50,
-          rect.top
-        );
-      }, i * 40);
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
     }
 
-    // Faster rain
-    clearInterval(heartInterval);
-    heartInterval = setInterval(() => createHeart(1.3), 100);
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('touchstart', moveNoButton);
 
-    // BIG HEART IN CENTER ❤️
-    const bigHeart = document.createElement("div");
-    bigHeart.innerHTML = "❤️";
-    bigHeart.style.position = "fixed";
-    bigHeart.style.left = "50%";
-    bigHeart.style.top = "50%";
-    bigHeart.style.transform = "translate(-50%, -50%) scale(0)";
-    bigHeart.style.fontSize = "200px";
-    bigHeart.style.zIndex = "999";
-    bigHeart.style.transition = "transform 0.6s ease";
+    yesBtn.addEventListener('click', () => {
+      main.style.display = 'none';
+      heartScreen.style.display = 'flex';
 
-    // Text
-    const text = document.createElement("div");
-    text.innerText = "SHE SAID YES — LET'S GO ❤️";
-    text.style.position = "fixed";
-    text.style.left = "50%";
-    text.style.top = "65%";
-    text.style.transform = "translate(-50%, -50%) scale(0)";
-    text.style.fontSize = "32px";
-    text.style.fontWeight = "bold";
-    text.style.color = "#ff0066";
-    text.style.zIndex = "999";
-    text.style.transition = "transform 0.6s ease";
-
-    document.body.appendChild(bigHeart);
-    document.body.appendChild(text);
-
-    setTimeout(() => {
-      bigHeart.style.transform = "translate(-50%, -50%) scale(1)";
-      text.style.transform = "translate(-50%, -50%) scale(1)";
-    }, 100);
-  });
-
-  // NO button escapes
-  const noBtn = document.getElementById("no");
-  noBtn.addEventListener("mouseover", () => {
-    noBtn.style.position = "absolute";
-    noBtn.style.left = Math.random() * (window.innerWidth - noBtn.offsetWidth) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - noBtn.offsetHeight) + "px";
-  });
-</script>
-
-
-
+      // spawn LOTS of hearts
+      for (let i = 0; i < 60; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = 3 + Math.random() * 4 + 's';
+        heart.style.fontSize = 16 + Math.random() * 30 + 'px';
+        heartScreen.appendChild(heart);
+      }
+    });
+  </script>
 </body>
 </html>
